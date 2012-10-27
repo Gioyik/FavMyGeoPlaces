@@ -1,1 +1,204 @@
-My GitHub Page
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA Compatible" content="IE=edge,chrome=1">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	
+	<title>FavMyGeoPlaces</title>
+	
+	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.0a1/jquery.mobile-1.0a1.min.css" />
+	<link rel="stylesheet" href="css/favgeo.css">
+
+	<script src="http://code.jquery.com/jquery-1.4.3.min.js"></script>
+	<script src="http://code.jquery.com/mobile/1.0a1/jquery.mobile-1.0a1.min.js"></script>
+	<script src="http://maps.google.com/maps/api/js?sensor=true" type="text/javascript"></script>
+	<script src="js/favgeo.js" type="text/javascript"></script>
+</head>
+<body class="index" onload="getStorageQty()">
+	<div data-role="page" id="home">
+		<header data-theme="c" data-nobackbtn="true" data-role="header">
+			<h3>FavMyGeoPlaces</h3>
+                        <h1><img src="img/home.png" alt="FavMyGeoPlaces"></h1>
+		</header>
+		<div data-role="content">
+			<ul data-role="listview" data-inset="true" data-theme="c" data-dividertheme="b">
+				<li data-role="list-divider">
+					<h2>¿En donde estas?</h2>
+				</li>
+				<li data-icon="map-mark">
+					<a href="#add" onclick="currentLoc()" title="¿Cual es tu posición actual?">Posición actual</a>
+				</li>
+				<li data-icon="grid">
+					<a href="#loc_mgmt" title="Lugares en los que has estado">Posiciones guardadas</a>
+					<span class="ui-li-count" id="storageQty"></span>
+				</li>
+			</ul>
+			<ul data-role="listview" data-inset="true" data-theme="c" data-dividertheme="b">
+				<li data-role="list-divider">
+					<h2>Acerca de</h2>
+				</li>
+				<li>
+					<a href="#howto" title="¿Como usar esta aplicación?">Ayuda</a>
+				</li>
+				<li>
+					<a href="#info" title="Acerca de la aplicación">Información</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+	
+	<div data-role="page" id="loc_mgmt">
+		<header data-theme="b" data-nobackbtn="true" data-role="header" name="header">
+			<h3>FavMyGeoPlaces</h3>
+                        <h1><img src="img/pages.png" alt="FavMyGeoPlaces"></h1>
+		</header>
+		<div data-role="content" id="content">
+			<div id="toolbar" data-role="controlgroup" data-type="horizontal"><a href="#home" title="Regresar" data-role="button" data-icon="refresh" data-theme="c" class="toolbar_link" data-transition="slide">Inicio</a><a href="#add" title="Agregar un lugar" data-role="button" data-icon="map-mark" data-theme="c" class="toolbar_link" data-transition="fade" >Agregar</a></div>
+			<ul data-role="listview" id="locationItems" data-inset="true" data-theme="c" data-dividertheme="a">
+				<li data-role="list-divider" id="list_header"><h2>Lugares</h2></li>
+				<li data-role="list-divider" class="itemsTitle" id="architecture">Arquitectura</li>
+				<li data-role="list-divider" class="itemsTitle" id="art">Artes y Artesanía</li>
+				<li data-role="list-divider" class="itemsTitle" id="education">Educación</li>
+				<li data-role="list-divider" class="itemsTitle" id="entertainment">Entretenimiento</li>
+				<li data-role="list-divider" class="itemsTitle" id="family">Familia</li>
+				<li data-role="list-divider" class="itemsTitle" id="food">Comida</li>
+				<li data-role="list-divider" class="itemsTitle" id="friends">Amigos</li>
+				<li data-role="list-divider" class="itemsTitle" id="landscape">Paisaje</li>
+				<li data-role="list-divider" class="itemsTitle" id="museum">Museo</li>
+				<li data-role="list-divider" class="itemsTitle" id="museum">Fiesta</li>
+				<li data-role="list-divider" class="itemsTitle" id="professional">Trabajo</li>
+				<li data-role="list-divider" class="itemsTitle" id="shopping">Compras</li>
+				<li data-role="list-divider" class="itemsTitle" id="techonology">Tecnología</li>
+				<li data-role="list-divider" class="itemsTitle" id="other">Otro</li>
+			</ul>
+			<div id="geoMessage"></div>
+			<div data-type="horizontal" data-role="controlgroup">
+				<a data-icon="arrow-u" title="Scroll back to Top" data-role="button">Principio de la pagina</a>
+				<a href="#clear" data-icon="delete" title="Delete all entries" data-role="button">Limpiar</a>
+			</div>
+		</div>
+	</div>
+	
+	<div data-role="page" id="clear">
+		<header data-theme="b" data-nobackbtn="true" data-role="header">
+			<h3>FavMyGeoPlaces</h3>
+                        <h1><img src="img/pages.png" alt="FavMyGeoPlaces"></h1>
+		</header>
+		<div data-role="content">
+			<div id="toolbar" data-role="controlgroup" data-type="horizontal"><a href="#home" title="Regresar" data-role="button" data-icon="refresh" data-theme="c" class="toolbar_link" data-transition="slide">Inicio</a><a href="#add" title="Agregar un lugar" data-role="button" data-icon="map-mark" data-theme="c" class="toolbar_link" data-transition="fade" >Agregar</a><a href="#loc_mgmt" title="Modificar lugares guardados" data-role="button" data-icon="grid" data-theme="c" class="toolbar_link" data-transition="fade">Modificar</a></div>
+			<h3>Eliminar toda la información</h3>
+			<p>¿Estas seguro/a de eliminar todas las entradas?<br>Esta acción no se podra deshacer.</p>
+			<div data-type="horizontal" data-role="controlgroup">
+				<a href="#home" onclick="deleteAll()" title="Eliminar todo" data-icon="check" data-role="button">Si</a>
+				<a href="#loc_mgmt" title="No eliminar nada" data-icon="delete" data-role="button">Cancelar</a>
+			</div>
+		</div>
+	</div>
+	
+	<div data-role="page" id="add">
+		<header data-theme="b" data-nobackbtn="true" data-role="header">
+			<h3>FavMyGeoPlaces</h3>
+                        <h1><img src="img/pages.png" alt="FavMyGeoPlaces"></h1>
+		</header>
+		<div data-role="content" id="geo_content">
+			<div id="toolbar" data-role="controlgroup" data-type="horizontal"><a href="#home" title="Regresar" data-role="button" data-icon="refresh" data-theme="c" class="toolbar_link" data-transition="slide">Inicio</a></div>
+			<label for="nameInput">Nombre del Lugar:</label>
+			<input type="text" name="nameInput" id="nameInput">
+			<label for="selectType">Tipo de lugar:</label>
+			<select name="selectType" id="selectType">
+				<option value="architecture">Arquitectura</option>
+				<option value="art">Artes y Artesanía</option>
+				<option value="education">Educación</option>
+				<option value="entertainment">Entretenimiento</option>
+				<option value="family">Familia</option>
+				<option value="food">Comida</option>
+				<option value="friends">Amigos</option>
+				<option value="landscape">Paisaje</option>
+				<option value="museum">Museo</option>
+				<option value="party">Fista</option>
+				<option value="professional">Trabajo</option>
+				<option value="shopping">Compras</option>
+				<option value="technology">Tecnologia</option>
+				<option value="other">Otro</option>
+			</select>
+			<input type="hidden" name="coordinates" id="coordinates">
+			<input type="hidden" name="itemId"  id="itemId">
+			<div id="mapImage"></div>
+			<div data-role="button" id="geoButton" data-theme="a" onclick="getGeo()">Ver mapa</div>
+			<div data-role="controlgroup" id="clearSaveButtons" style="display:none;" data-type="horizontal">
+				<div data-role="button" id="saveButton" data-theme="b" onclick="saveItem()" data-icon="check">Guardar lugar</div>
+				<div data-role="button" id="clearButton" data-theme="c" onclick="clearItem()" data-icon="back">Limpiar campos</div>
+			</div>
+		</div>
+	</div>
+
+	<div data-role="page" id="itemView">
+		<header data-theme="b" data-nobackbtn="true" data-role="header">
+			<h3>FavMyGeoPlaces</h3>
+                        <h1><img src="img/pages.png" alt="FavMyGeoPlaces"></h1>
+		</header>
+		<div data-role="content" id="itemContent">
+			<div id="toolbar" data-role="controlgroup" data-type="horizontal"><a href="#home" title="Regresar" data-role="button" data-icon="refresh" data-theme="c" class="toolbar_link" data-transition="slide">Inicio</a><a href="#add" title="Agregar un lugar" data-role="button" data-icon="map-mark" data-theme="c" class="toolbar_link" data-transition="fade" >Agregar</a><a href="#loc_mgmt" title="Modificar lugares guardados" data-role="button" data-icon="grid" data-theme="c" class="toolbar_link" data-transition="fade">Modificar</a></div>
+			<ul data-role="listview" data-theme="c" data-dividertheme="a">
+				<li data-role="list-divider" id="itemListType">Tipo</li>
+				<li data-role="list-divider" id="itemListName">Nombre</li>
+			</ul>
+			<div id="itemListMap"></div>
+			<div>
+				<a href="#delItem" data-icon="delete" data-role="button">Borrar lugar</a>
+			</div>
+			<input type="hidden" name="itemKey" id="itemKey">
+		</div>
+	</div>
+
+	<div data-role="page" id="delItem">
+		<header data-theme="b" data-nobackbtn="true" data-role="header">
+			<h3>FavMyGeoPlaces</h3>
+                        <h1><img src="img/pages.png" alt="FavMyGeoPlaces"></h1>
+		</header>
+		<div data-role="content">
+			<div id="toolbar" data-role="controlgroup" data-type="horizontal"><a href="#home" title="Regresar" data-role="button" data-icon="refresh" data-theme="c" class="toolbar_link" data-transition="slide">Inicio</a></div>
+			<p>¿Estas seguro/a de eliminar esta entrada <span id="item2Del"></span>?</p>
+			<div data-role="controlgroup" data-type="horizontal">
+				<a href="#home" onclick="deleteItem()" title="Eliminar lugar" data-icon="check" data-role="button">Si</a>
+				<a href="#itemView" title="No eliminar" data-icon="delete" data-role="button">Cancelar</a>
+			</div>
+			<input id="itemKey2Del" type="hidden">
+		</div>
+	</div>
+
+	<div data-role="page" id="howto">
+		<header data-theme="b" data-nobackbtn="true" data-role="header">
+			<h3>FavMyGeoPlaces</h3>
+                        <h1><img src="img/help.png" alt="FavMyGeoPlaces"></h1>
+		</header>
+		<div data-role="content">
+			<div id="toolbar" data-role="controlgroup" data-type="horizontal"><a href="#home" title="Regresar" data-role="button" data-icon="refresh" data-theme="c" class="toolbar_link" data-transition="slide">Inicio</a></div>
+			<h2>FavMyGeoPlaces!</h2>
+			<p align="justify">Gracias por usar esta aplicación, ha sido construida con gran esfuerzo y dedicación.Esta aplicación solamente tiene 2 funciones las cuales tras de ser pocas son completas y totalmente funcionales.</p>
+			<ul>
+				<li>Agregar un lugar</li>
+				<li>Manejar lugares</li>
+			</ul>
+			<p align="justify">"Agregar un lugar" quiere decir que tendras la oportunidad de registrar un lugar en tu dispositivo movil o equipo usando el sistema de Geolocalización que tiene integrado, asignandole una categoria de igual manera segun sea el sitio o evento, señalandolo en el mapa que es proporcionado por la api de Google Maps. Recuerda darle los permisos a la aplicación de que use tu localización para que la aplicación sea usada correctamente.</p>
+			<p align="justify">"Manejar lugares" muestra el listado de lugares que anteriormente has agregado, dandote un listado y una descripción del lugar y/o evento guardado, incluso puedes eliminar el que desees cuando lo desees.</p>
+			<p>Buena suerte y diviértase!</p>
+			<h3>Gioyik - Developer</h3>
+		</div>
+	</div>
+	
+	<div data-role="page" id="info">
+		<header data-theme="b" data-nobackbtn="true" data-role="header">
+			<h3>FavMyGeoPlaces</h3>
+                        <h1><img src="img/info.png" alt="FavMyGeoPlaces"></h1>
+		</header>
+		<div data-role="content">
+			<div id="toolbar" data-role="controlgroup" data-type="horizontal"><a href="#home" title="Regresar" data-role="button" data-icon="refresh" data-theme="c" class="toolbar_link" data-transition="slide">Inicio</a></div>
+			<p align="justify"><a href="https://github.com/Gioyik/FavMyGeoPlaces">FavMyGeoPlaces</a> creado por <a href="https://twitter.com/Gioyik">Giovanny Andrés Góngora Granada (Gioyik)</a> y esta aplicacion esta licenciada bajo la <a href="http://www.opensource.org/licenses/gpl-3.0.html">GNU General Public License, version 3 (GPLv3)</a>. Puedes usar la aplicación libremente sin ninguna restricción. Si desea aportar al codigo de esta aplicación no dude en visitar nuestro repositorio en GitHub.</p>
+		</div>
+	</div>
+	
+</body>
+</html>
